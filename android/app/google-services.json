@@ -12,7 +12,20 @@
           "package_name": "com.example.allevents_pro"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "240434334217-rkpmehsggha5fpc19ad874kp9klev1sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.allevents_pro",
+            "certificate_hash": "ef9b170cd92d6ffd0f6215c7524897ea134e146a"
+          }
+        },
+        {
+          "client_id": "240434334217-t8qkchlsi2c98ald80n6v13243pc7dep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDlccTw5qG1c56zx5tzv-wbGK3TDsHTzoM"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240434334217-t8qkchlsi2c98ald80n6v13243pc7dep.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "240434334217-ch2crtb6un906arol9bfsda009e3vjap.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.alleventsPro"
+              }
+            }
+          ]
         }
       }
     }
