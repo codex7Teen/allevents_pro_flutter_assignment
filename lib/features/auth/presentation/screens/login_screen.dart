@@ -3,10 +3,11 @@ import 'package:allevents_pro/core/config/app_colors.dart';
 import 'package:allevents_pro/core/config/app_text_styles.dart';
 import 'package:allevents_pro/core/presentation/widgets/custom_login_button_widget.dart';
 import 'package:allevents_pro/core/utils/screen_dimesions_util.dart';
+import 'package:allevents_pro/features/auth/providers/auth_service_provider.dart';
 import 'package:allevents_pro/shared/custom_snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ScreenLogin extends StatefulWidget {
@@ -99,9 +100,18 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 SizedBox(height: screenHeight * 0.014),
 
                 //! G O O G L E - S I G N I N
-                CustomLoginButtonWidget(
-                  buttonText: 'Sign In with Google',
-                  image: 'assets/images/google_logo_nobg.png',
+                Consumer<AuthServiceProvider>(
+                  builder: (context, authProvider, child) {
+                    return CustomLoginButtonWidget(
+                      onTap:
+                          authProvider.isGoogleLoginLoading
+                              ? null
+                              : () => authProvider.signInWithGoogle(context),
+                      buttonText: 'Sign In with Google',
+                      image: 'assets/images/google_logo_nobg.png',
+                      isLoading: authProvider.isGoogleLoginLoading,
+                    );
+                  },
                 ),
                 SizedBox(height: screenHeight * 0.014),
 

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ScreenSplash1 extends StatefulWidget {
-  const ScreenSplash1({super.key});
+  final String? screenName;
+  const ScreenSplash1({super.key, this.screenName});
 
   @override
   State<ScreenSplash1> createState() => _ScreenSplash1State();
@@ -38,7 +39,7 @@ class _ScreenSplash1State extends State<ScreenSplash1> {
     // Navigate to intro-screen or Main screen based on argument
     Future.delayed(const Duration(milliseconds: 3000), () {
       if (mounted) {
-        context.go('/login_screen');
+        context.go(widget.screenName!);
       }
     });
   }
