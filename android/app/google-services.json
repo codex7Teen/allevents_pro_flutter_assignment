@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "240434334217",
+    "project_id": "alleventspro-aa866",
+    "storage_bucket": "alleventspro-aa866.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240434334217:android:2df6ac7c51769470c086d8",
+        "android_client_info": {
+          "package_name": "com.example.allevents_pro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlccTw5qG1c56zx5tzv-wbGK3TDsHTzoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
