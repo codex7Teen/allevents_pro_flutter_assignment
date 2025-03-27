@@ -2,6 +2,7 @@ import 'package:allevents_pro/core/config/app_colors.dart';
 import 'package:allevents_pro/core/config/app_text_styles.dart';
 import 'package:allevents_pro/core/utils/screen_dimesions_util.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
+import 'package:allevents_pro/data/models/events_model.dart';
 import 'package:allevents_pro/features/events/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -167,9 +168,23 @@ class _ScreenEventsState extends State<ScreenEvents> {
             return Center(child: Text('No events found for this category'));
           }
 
-          return eventProvider.isGridView
-              ? _buildGridView(eventProvider)
-              : _buildListView(eventProvider);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //! T I T L E
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                child: Text(
+                  'Results in Ahmedabad',
+                  style: AppTextStyles.subHeadings,
+                ),
+              ),
+              //! LIST & GRID VIEWS
+              eventProvider.isGridView
+                  ? Expanded(child: _buildGridView(eventProvider))
+                  : Expanded(child: _buildListView(eventProvider)),
+            ],
+          );
         },
       ),
     );
@@ -177,7 +192,7 @@ class _ScreenEventsState extends State<ScreenEvents> {
 
   Widget _buildGridView(EventProvider eventProvider) {
     return GridView.builder(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.7,
@@ -187,40 +202,123 @@ class _ScreenEventsState extends State<ScreenEvents> {
       itemCount: eventProvider.events.length,
       itemBuilder: (context, index) {
         final event = eventProvider.events[index];
-        return _buildEventCard(event, isGridView: true);
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          child: Column(
+            children: [
+              //! I M A G E
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  event.thumbUrl,
+                  height: 100,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: Icon(Icons.image_not_supported),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value:
+                            loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              //! D E T A I L S
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Column(
+                  spacing: 3,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      event.eventName,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodyMedium,
+                    ),
+                    Text(
+                      event.location,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.greyColor2,
+                      ),
+                    ),
+                    Divider(thickness: 0.3),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Text(
+                              event.formattedStartDate,
+                              style: AppTextStyles.bodySmall.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.greyColor2,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.star_border_rounded,
+                          color: AppColors.greyColor,
+                          size: 25,
+                        ),
+                        SizedBox(width: 5),
+                        Icon(
+                          Icons.ios_share_rounded,
+                          color: AppColors.greyColor,
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
 
   Widget _buildListView(EventProvider eventProvider) {
     return ListView.builder(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
       itemCount: eventProvider.events.length,
       itemBuilder: (context, index) {
         final event = eventProvider.events[index];
-        return _buildEventCard(event, isGridView: false);
+        return buildEventListCard(event);
       },
     );
   }
 
-  Widget _buildEventCard(dynamic event, {bool isGridView = false}) {
-    return GestureDetector(
-      onTap:
-          () => Provider.of<EventProvider>(
-            context,
-            listen: false,
-          ).navigateToEventDetails(context, event),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+  Widget buildEventListCard(EventModel event) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //! I M A G E
+          Flexible(
+            flex: 6,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 event.thumbUrl,
-                height: isGridView ? 180 : 220,
+                height: 100,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
@@ -243,45 +341,145 @@ class _ScreenEventsState extends State<ScreenEvents> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10),
+          ),
+          SizedBox(width: 12),
+          //! D E T A I L S
+          Flexible(
+            flex: 9,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: Column(
+                spacing: 3,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     event.eventName,
-                    style: AppTextStyles.bodySmall2.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodyMedium,
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    event.formattedStartDate,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.greyColor2,
-                    ),
-                  ),
-                  Text(
-                    event.formattedStartTime,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.greyColor2,
-                    ),
-                  ),
-                  SizedBox(height: 5),
                   Text(
                     event.location,
-                    style: AppTextStyles.bodySmall,
-                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.greyColor2,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Divider(thickness: 0.3),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        event.formattedStartDate,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.greyColor2,
+                        ),
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.star_border_rounded,
+                        color: AppColors.greyColor,
+                        size: 25,
+                      ),
+                      SizedBox(width: 5),
+                      Icon(
+                        Icons.ios_share_rounded,
+                        color: AppColors.greyColor,
+                        size: 20,
+                      ),
+                      SizedBox(width: 10),
+                    ],
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  // Widget _buildEventCard(dynamic event, {bool isGridView = false}) {
+  //   return GestureDetector(
+  //     onTap:
+  //         () => Provider.of<EventProvider>(
+  //           context,
+  //           listen: false,
+  //         ).navigateToEventDetails(context, event),
+  //     child: Card(
+  //       elevation: 4,
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           ClipRRect(
+  //             borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+  //             child: Image.network(
+  //               event.thumbUrl,
+  //               height: isGridView ? 180 : 220,
+  //               width: double.infinity,
+  //               fit: BoxFit.cover,
+  //               errorBuilder: (context, error, stackTrace) {
+  //                 return Container(
+  //                   color: Colors.grey[300],
+  //                   child: Icon(Icons.image_not_supported),
+  //                 );
+  //               },
+  //               loadingBuilder: (context, child, loadingProgress) {
+  //                 if (loadingProgress == null) return child;
+  //                 return Center(
+  //                   child: CircularProgressIndicator(
+  //                     value:
+  //                         loadingProgress.expectedTotalBytes != null
+  //                             ? loadingProgress.cumulativeBytesLoaded /
+  //                                 loadingProgress.expectedTotalBytes!
+  //                             : null,
+  //                   ),
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //           Padding(
+  //             padding: const EdgeInsets.all(10),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   event.eventName,
+  //                   style: AppTextStyles.bodySmall2.copyWith(
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                   maxLines: 2,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //                 SizedBox(height: 5),
+  //                 Text(
+  //                   event.formattedStartDate,
+  //                   style: AppTextStyles.bodySmall.copyWith(
+  //                     color: AppColors.greyColor2,
+  //                   ),
+  //                 ),
+  //                 Text(
+  //                   event.formattedStartTime,
+  //                   style: AppTextStyles.bodySmall.copyWith(
+  //                     color: AppColors.greyColor2,
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 5),
+  //                 Text(
+  //                   event.location,
+  //                   style: AppTextStyles.bodySmall,
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

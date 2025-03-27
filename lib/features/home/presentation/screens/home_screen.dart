@@ -34,6 +34,7 @@ class _ScreenHomeState extends State<ScreenHome> {
   Widget build(BuildContext context) {
     final screenHeight = ScreenDimensionsUtil.getScreenHeight(context);
     return Scaffold(
+      backgroundColor: AppColors.whiteColor,
       //! A P P - B A R
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(screenHeight * 0.155),
@@ -106,7 +107,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                               decoration: InputDecoration(
                                 hintText: "What’s your next adventure? 🎉",
                                 border: InputBorder.none,
-                                hintStyle: AppTextStyles.hintTextStyle
+                                hintStyle: AppTextStyles.hintTextStyle,
                               ),
                             ),
                           ),
@@ -122,113 +123,110 @@ class _ScreenHomeState extends State<ScreenHome> {
       ),
 
       //! B O D Y
-      body: Padding(
-        padding: const EdgeInsets.only(left: 14, right: 14, top: 20),
-        child: Column(
-          children: [
-            //! E X P L O R E  -  T E X T
-            GestureDetector(
-              onTap: () {
-                //! B O T T O M  -  S H E E T
-                showModalBottomSheet(
-                  context: context,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  builder: (context) {
-                    return Consumer<CategoryProvider>(
-                      builder: (context, categoryProvider, child) {
-                        if (categoryProvider.isCategoriesLoading) {
-                          return SizedBox(
-                            height: 200,
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
+      body: Column(
+        children: [
+          //! E X P L O R E  -  T E X T
+          GestureDetector(
+            onTap: () {
+              //! B O T T O M  -  S H E E T
+              showModalBottomSheet(
+                context: context,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (context) {
+                  return Consumer<CategoryProvider>(
+                    builder: (context, categoryProvider, child) {
+                      if (categoryProvider.isCategoriesLoading) {
+                        return SizedBox(
+                          height: 200,
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
 
-                        if (categoryProvider.categoryError != null) {
-                          return SizedBox(
-                            height: 200,
-                            child: Center(
-                              child: Text("Error loading categories"),
-                            ),
-                          );
-                        }
+                      if (categoryProvider.categoryError != null) {
+                        return SizedBox(
+                          height: 200,
+                          child: Center(
+                            child: Text("Error loading categories"),
+                          ),
+                        );
+                      }
 
-                        return Container(
-                          padding: EdgeInsets.all(16),
-                          height: screenHeight * 0.42,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 10),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Choose your preferred",
-                                  style: AppTextStyles.subHeadings,
-                                  children: [
-                                    TextSpan(
-                                      text: " Category",
-                                      style: AppTextStyles.subHeadings.copyWith(
-                                        color: AppColors.blueAccent,
-                                      ),
+                      return Container(
+                        padding: EdgeInsets.all(16),
+                        height: screenHeight * 0.42,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            RichText(
+                              text: TextSpan(
+                                text: "Choose your preferred",
+                                style: AppTextStyles.subHeadings,
+                                children: [
+                                  TextSpan(
+                                    text: " Category",
+                                    style: AppTextStyles.subHeadings.copyWith(
+                                      color: AppColors.blueAccent,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10),
-                              Expanded(
-                                child: ListView.separated(
-                                  itemCount: categoryProvider.categories.length,
-                                  separatorBuilder: (context, index) {
-                                    return Divider();
-                                  },
-                                  itemBuilder: (context, index) {
-                                    final category =
-                                        categoryProvider.categories[index];
-                                    return ListTile(
-                                      leading: SizedBox(
-                                        height: 40,
-                                        width: 40,
-                                        child: CircleAvatar(
-                                          backgroundImage: AssetImage(
-                                            CategoryModel.getGenreImagePath(
-                                              category.category,
-                                            ),
+                            ),
+                            SizedBox(height: 10),
+                            Expanded(
+                              child: ListView.separated(
+                                itemCount: categoryProvider.categories.length,
+                                separatorBuilder: (context, index) {
+                                  return Divider();
+                                },
+                                itemBuilder: (context, index) {
+                                  final category =
+                                      categoryProvider.categories[index];
+                                  return ListTile(
+                                    leading: SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                          CategoryModel.getGenreImagePath(
+                                            category.category,
                                           ),
                                         ),
                                       ),
-                                      title: Text(
-                                        category.category[0].toUpperCase() +
-                                            category.category.substring(1),
-                                        style: AppTextStyles.bodySmall2
-                                            .copyWith(
-                                              color: AppColors.blackColor,
-                                            ),
+                                    ),
+                                    title: Text(
+                                      category.category[0].toUpperCase() +
+                                          category.category.substring(1),
+                                      style: AppTextStyles.bodySmall2.copyWith(
+                                        color: AppColors.blackColor,
                                       ),
-                                      onTap: () {
-                                        Navigator.pop(
-                                          context,
-                                        ); // Close bottom sheet
-                                        categoryProvider
-                                            .navigateToCategoryDetails(
-                                              context,
-                                              category,
-                                            );
-                                      },
-                                    );
-                                  },
-                                ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pop(
+                                        context,
+                                      ); // Close bottom sheet
+                                      categoryProvider
+                                          .navigateToCategoryDetails(
+                                            context,
+                                            category,
+                                          );
+                                    },
+                                  );
+                                },
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 14, right: 14, top: 20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -241,39 +239,42 @@ class _ScreenHomeState extends State<ScreenHome> {
                 ],
               ),
             ),
+          ),
 
-            //! A L L  -  C A T E G O R I E S
-            const SizedBox(height: 20),
+          //! A L L  -  C A T E G O R I E S
+          const SizedBox(height: 20),
 
-            // Consumer to listen to CategoryProvider changes
-            Consumer<CategoryProvider>(
-              builder: (context, categoryProvider, child) {
-                // Show loading indicator while fetching categories
-                if (categoryProvider.isCategoriesLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+          // Consumer to listen to CategoryProvider changes
+          Consumer<CategoryProvider>(
+            builder: (context, categoryProvider, child) {
+              // Show loading indicator while fetching categories
+              if (categoryProvider.isCategoriesLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                //! Show error if any
-                if (categoryProvider.categoryError != null) {
-                  return Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Error loading categories',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        ElevatedButton(
-                          onPressed:
-                              () => categoryProvider.fetchCategories(context),
-                          child: Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
+              //! Show error if any
+              if (categoryProvider.categoryError != null) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Error loading categories',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      ElevatedButton(
+                        onPressed:
+                            () => categoryProvider.fetchCategories(context),
+                        child: Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-                //! Show categories
-                return SizedBox(
+              //! Show categories
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: SizedBox(
                   height: 130,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -322,11 +323,13 @@ class _ScreenHomeState extends State<ScreenHome> {
                       );
                     },
                   ),
-                );
-              },
-            ),
-          ],
-        ),
+                ),
+              );
+            },
+          ),
+          Spacer(),
+          Image.asset('assets/images/home_screen_quote.jpg', fit: BoxFit.cover),
+        ],
       ),
     );
   }
