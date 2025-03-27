@@ -1,18 +1,18 @@
 import 'package:intl/intl.dart';
 
 class EventModel {
-  final String eventId;
-  final String eventName;
-  final String thumbUrl;
-  final String largeThumbUrl;
-  final int startTime;
-  final int endTime;
-  final String location;
-  final Venue venue;
-  final String eventUrl;
-  final String bannerUrl;
-  final List<String> categories;
-  final TicketInfo tickets;
+  final String eventId; // Unique event identifier
+  final String eventName; // Event name
+  final String thumbUrl; // Thumbnail image URL
+  final String largeThumbUrl; // Large thumbnail URL
+  final int startTime; // Event start time (Unix timestamp)
+  final int endTime; // Event end time (Unix timestamp)
+  final String location; // Event location
+  final Venue venue; // Venue details
+  final String eventUrl; // URL to event details
+  final String bannerUrl; // Event banner image
+  final List<String> categories; // List of event categories
+  final TicketInfo tickets; // Ticket information
 
   EventModel({
     required this.eventId,
@@ -29,6 +29,7 @@ class EventModel {
     required this.tickets,
   });
 
+  //! F A C T O R Y   C O N S T R U C T O R
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       eventId: _parseString(json['event_id']),
@@ -46,12 +47,11 @@ class EventModel {
     );
   }
 
-  // Utility method to safely parse strings
+  //! U T I L I T Y   M E T H O D S   F O R   D A T A   P A R S I N G
   static String _parseString(dynamic value) {
     return value?.toString() ?? '';
   }
 
-  // Utility method to safely parse integers
   static int _parseInteger(dynamic value) {
     if (value is int) return value;
     if (value is double) return value.toInt();
@@ -59,7 +59,6 @@ class EventModel {
     return 0;
   }
 
-  // Utility method to safely parse string lists
   static List<String> _parseStringList(dynamic value) {
     if (value is List) {
       return value.map((item) => item?.toString() ?? '').toList();
@@ -67,33 +66,33 @@ class EventModel {
     return [];
   }
 
-  // Convert timestamp to readable date
+  //! F O R M A T   D A T E   &   T I M E
   String get formattedStartDate {
     return DateFormat(
       'EEE, MMM d, yyyy',
     ).format(DateTime.fromMillisecondsSinceEpoch(startTime * 1000));
   }
 
-  // Convert timestamp to readable time
   String get formattedStartTime {
     return DateFormat(
       'h:mm a',
     ).format(DateTime.fromMillisecondsSinceEpoch(startTime * 1000));
   }
 
+  //! C O N V E R T   J S O N   L I S T   T O   M O D E L   L I S T
   static List<EventModel> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) => EventModel.fromJson(json)).toList();
   }
 }
 
 class Venue {
-  final String street;
-  final String city;
-  final String state;
-  final String country;
-  final double latitude;
-  final double longitude;
-  final String fullAddress;
+  final String street; // Street address
+  final String city; // City name
+  final String state; // State name
+  final String country; // Country name
+  final double latitude; // Latitude coordinate
+  final double longitude; // Longitude coordinate
+  final String fullAddress; // Full venue address
 
   Venue({
     required this.street,
@@ -105,6 +104,7 @@ class Venue {
     required this.fullAddress,
   });
 
+  //! F A C T O R Y   C O N S T R U C T O R
   factory Venue.fromJson(Map<String, dynamic> json) {
     return Venue(
       street: _parseString(json['street']),
@@ -117,7 +117,7 @@ class Venue {
     );
   }
 
-  // Utility method to safely parse doubles
+  //! U T I L I T Y   M E T H O D S   F O R   D A T A   P A R S I N G
   static double _parseDouble(dynamic value) {
     if (value is double) return value;
     if (value is int) return value.toDouble();
@@ -131,11 +131,11 @@ class Venue {
 }
 
 class TicketInfo {
-  final bool hasTickets;
-  final String ticketUrl;
-  final String ticketCurrency;
-  final double minTicketPrice;
-  final double maxTicketPrice;
+  final bool hasTickets; // Availability of tickets
+  final String ticketUrl; // Ticket purchase URL
+  final String ticketCurrency; // Currency type
+  final double minTicketPrice; // Minimum ticket price
+  final double maxTicketPrice; // Maximum ticket price
 
   TicketInfo({
     required this.hasTickets,
@@ -145,6 +145,7 @@ class TicketInfo {
     required this.maxTicketPrice,
   });
 
+  //! F A C T O R Y   C O N S T R U C T O R
   factory TicketInfo.fromJson(Map<String, dynamic> json) {
     return TicketInfo(
       hasTickets: _parseBool(json['has_tickets']),
@@ -155,7 +156,7 @@ class TicketInfo {
     );
   }
 
-  // Utility method to safely parse doubles
+  //! U T I L I T Y   M E T H O D S   F O R   D A T A   P A R S I N G
   static double _parseDouble(dynamic value) {
     if (value is double) return value;
     if (value is int) return value.toDouble();
@@ -163,12 +164,10 @@ class TicketInfo {
     return 0.0;
   }
 
-  // Utility method to safely parse strings
   static String _parseString(dynamic value) {
     return value?.toString() ?? '';
   }
 
-  // Utility method to safely parse booleans
   static bool _parseBool(dynamic value) {
     if (value is bool) return value;
     if (value is int) return value != 0;

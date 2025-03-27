@@ -16,12 +16,14 @@ class CustomEmptyDisplayWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 130),
+            // Show lottie
             Lottie.asset(
               'assets/lottie/search_empty_lottie_white.json',
               width: 190,
               repeat: false,
             ),
             const SizedBox(height: 18),
+            // Show empyt text
             Text(
               text,
               textAlign: TextAlign.center,

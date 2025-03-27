@@ -1,25 +1,28 @@
 class CategoryModel {
-  final String category;
-  final String data;
+  final String category; // Category name
+  final String data; // Additional data related to category
 
   CategoryModel({required this.category, required this.data});
 
+  //! F A C T O R Y   C O N S T R U C T O R
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      category: json['category'] ?? 'Unknown',
-      data: json['data'] ?? '',
+      category: json['category'] ?? 'Unknown', // Handle missing category
+      data: json['data'] ?? '', // Handle missing data
     );
   }
 
+  //! C O N V E R T   T O   J S O N
   Map<String, dynamic> toJson() {
     return {'category': category, 'data': data};
   }
 
+  //! C O N V E R T   J S O N   L I S T   T O   M O D E L   L I S T
   static List<CategoryModel> fromJsonList(List<dynamic> json) {
     return json.map((item) => CategoryModel.fromJson(item)).toList();
   }
 
-  // Method to get image path based on api data
+  //! G E T   I M A G E   P A T H   B A S E D   O N   G E N R E
   static String getGenreImagePath(String genreName) {
     switch (genreName) {
       case 'all':
@@ -39,7 +42,7 @@ class CategoryModel {
       case 'comedy':
         return 'assets/images/category_images/comedy.jpeg';
       default:
-        return 'assets/images/category_images/party.jpeg';
+        return 'assets/images/category_images/party.jpeg'; // Default image
     }
   }
 }
