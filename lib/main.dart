@@ -1,5 +1,6 @@
 import 'package:allevents_pro/core/config/app_router.dart';
 import 'package:allevents_pro/features/auth/providers/auth_service_provider.dart';
+import 'package:allevents_pro/features/events/providers/event_provider.dart';
 import 'package:allevents_pro/features/home/providers/category_provider.dart';
 import 'package:allevents_pro/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthServiceProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => EventProvider())
       ],
       child: const MyApp(),
     ),

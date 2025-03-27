@@ -34,7 +34,7 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
-    static TextStyle bodySmall2 = GoogleFonts.poppins(
+  static TextStyle bodySmall2 = GoogleFonts.poppins(
     color: AppColors.whiteColor,
     fontSize: 13.5,
     letterSpacing: 0.01,
@@ -42,12 +42,19 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
-    static TextStyle subHeadings = GoogleFonts.poppins(
-                    color: AppColors.blackColor,
-                    fontSize: 17.5,
-                    decoration: TextDecoration.none,
-                    letterSpacing: 0,
-                    wordSpacing: 0,
-                    fontWeight: FontWeight.w600,
-                  );
+  static TextStyle subHeadings = GoogleFonts.poppins(
+    color: AppColors.blackColor,
+    fontSize: 17.5,
+    decoration: TextDecoration.none,
+    letterSpacing: 0,
+    wordSpacing: 0,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle hintTextStyle = GoogleFonts.poppins(
+    color: AppColors.greyColor2,
+    fontSize: 13.5,
+    letterSpacing: 0.01,
+    wordSpacing: 1,
+    fontWeight: FontWeight.w400,
+  );
 }

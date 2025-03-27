@@ -72,7 +72,7 @@ class CategoryProvider extends ChangeNotifier {
   void navigateToCategoryDetails(BuildContext context, CategoryModel category) {
     try {
       // Example navigation - adjust based on your app's routing
-      router.pushNamed('category_details', extra: category);
+      router.pushNamed('event_screen', extra: category);
     } catch (e) {
       CustomSnackbar.show(
         context,

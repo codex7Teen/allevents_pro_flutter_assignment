@@ -4,7 +4,6 @@ import 'package:allevents_pro/core/utils/screen_dimesions_util.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/features/home/providers/category_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -107,13 +106,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                               decoration: InputDecoration(
                                 hintText: "What’s your next adventure? 🎉",
                                 border: InputBorder.none,
-                                hintStyle: GoogleFonts.poppins(
-                                  color: AppColors.greyColor2,
-                                  fontSize: 13.5,
-                                  letterSpacing: 0.01,
-                                  wordSpacing: 1,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                hintStyle: AppTextStyles.hintTextStyle
                               ),
                             ),
                           ),
