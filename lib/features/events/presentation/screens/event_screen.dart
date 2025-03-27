@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:allevents_pro/core/config/app_colors.dart';
+import 'package:allevents_pro/core/config/app_router.dart';
 import 'package:allevents_pro/core/config/app_text_styles.dart';
 import 'package:allevents_pro/core/utils/screen_dimesions_util.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
@@ -10,6 +13,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScreenEvents extends StatefulWidget {
   final CategoryModel category;
@@ -331,97 +335,108 @@ class _ScreenEventsState extends State<ScreenEvents> {
   }
 
   Widget buildEventListCard(EventModel event) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //! I M A G E
-          Flexible(
-            flex: 6,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                event.thumbUrl,
-                height: 100,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: Icon(Icons.image_not_supported),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value:
-                          loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                    ),
-                  );
-                },
+    return GestureDetector(
+      onTap: () async {
+        final url = event.eventUrl;
+        if (!await launchUrl(
+          Uri.parse(url),
+          mode: LaunchMode.inAppBrowserView,
+        )) {
+          throw Exception('Could not launch url $url');
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //! I M A G E
+            Flexible(
+              flex: 6,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  event.thumbUrl,
+                  height: 100,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: Icon(Icons.image_not_supported),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value:
+                            loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 12),
-          //! D E T A I L S
-          Flexible(
-            flex: 9,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Column(
-                spacing: 3,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    event.eventName,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.bodyMedium,
-                  ),
-                  Text(
-                    event.location,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.greyColor2,
+            SizedBox(width: 12),
+            //! D E T A I L S
+            Flexible(
+              flex: 9,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Column(
+                  spacing: 3,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      event.eventName,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodyMedium,
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Divider(thickness: 0.3),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        event.formattedStartDate,
-                        style: AppTextStyles.bodySmall.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.greyColor2,
+                    Text(
+                      event.location,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.greyColor2,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Divider(thickness: 0.3),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          event.formattedStartDate,
+                          style: AppTextStyles.bodySmall.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.greyColor2,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.star_border_rounded,
-                        color: AppColors.greyColor,
-                        size: 25,
-                      ),
-                      SizedBox(width: 5),
-                      Icon(
-                        Icons.ios_share_rounded,
-                        color: AppColors.greyColor,
-                        size: 20,
-                      ),
-                      SizedBox(width: 10),
-                    ],
-                  ),
-                ],
+                        Spacer(),
+                        Icon(
+                          Icons.star_border_rounded,
+                          color: AppColors.greyColor,
+                          size: 25,
+                        ),
+                        SizedBox(width: 5),
+                        Icon(
+                          Icons.ios_share_rounded,
+                          color: AppColors.greyColor,
+                          size: 20,
+                        ),
+                        SizedBox(width: 10),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
