@@ -35,6 +35,7 @@ class _ScreenEventsState extends State<ScreenEvents> {
   Widget build(BuildContext context) {
     final screenHeight = ScreenDimensionsUtil.getScreenHeight(context);
     return Scaffold(
+      //! B A C K G R O U N D  -  C O L O R
       backgroundColor: AppColors.whiteColor,
       //! A P P - B A R
       appBar: EventScreenWidgets.buildAppbar(
