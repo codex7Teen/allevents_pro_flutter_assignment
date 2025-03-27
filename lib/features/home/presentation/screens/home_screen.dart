@@ -1,11 +1,13 @@
 import 'package:allevents_pro/core/config/app_colors.dart';
+import 'package:allevents_pro/core/config/app_router.dart';
 import 'package:allevents_pro/core/config/app_text_styles.dart';
 import 'package:allevents_pro/core/utils/screen_dimesions_util.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/features/home/providers/category_provider.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ScreenHome extends StatefulWidget {
   const ScreenHome({super.key});
@@ -33,11 +35,15 @@ class _ScreenHomeState extends State<ScreenHome> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = ScreenDimensionsUtil.getScreenHeight(context);
+    final categoryProvider = Provider.of<CategoryProvider>(
+      context,
+      listen: false,
+    );
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       //! A P P - B A R
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.155),
+        preferredSize: Size.fromHeight(screenHeight * 0.145),
         child: AppBar(
           elevation: 0,
           flexibleSpace: Stack(
@@ -62,56 +68,79 @@ class _ScreenHomeState extends State<ScreenHome> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 8,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Image.asset(
-                            'assets/images/allevents_logo_nobg.png',
-                            width: 30,
+                        FadeInLeft(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Image.asset(
+                              'assets/images/allevents_logo_nobg.png',
+                              width: 30,
+                            ),
                           ),
                         ),
-                        Text('Ahmedabad', style: AppTextStyles.bodySmall2),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColors.whiteColor,
+                        FadeInLeft(
+                          child: Text(
+                            'Ahmedabad',
+                            style: AppTextStyles.bodySmall2,
+                          ),
+                        ),
+                        FadeInLeft(
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColors.whiteColor,
+                          ),
                         ),
                         Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 14),
-                          child: Icon(
-                            Icons.notifications,
-                            color: AppColors.whiteColor,
+                        FadeInRight(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 14),
+                            child: Icon(
+                              Icons.notifications,
+                              color: AppColors.whiteColor,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: 14),
-                    Container(
-                      height: 46,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteColor,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.search_rounded,
-                            color: AppColors.greyColor2,
-                            size: 22,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextFormField(
-                              enabled: false,
-                              decoration: InputDecoration(
-                                hintText: "What’s your next adventure? 🎉",
-                                border: InputBorder.none,
-                                hintStyle: AppTextStyles.hintTextStyle,
+
+                    //! Search Bar
+                    GestureDetector(
+                      onTap:
+                          categoryProvider.isCategoriesLoading
+                              ? null
+                              : () =>
+                                  categoryProvider.navigateToCategoryDetails(
+                                    context,
+                                    categoryProvider.categories[0],
+                                  ),
+                      child: Container(
+                        height: 46,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteColor,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.search_rounded,
+                              color: AppColors.greyColor2,
+                              size: 22,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextFormField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  hintText: "What’s your next adventure? 🎉",
+                                  border: InputBorder.none,
+                                  hintStyle: AppTextStyles.hintTextStyle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -159,6 +188,23 @@ class _ScreenHomeState extends State<ScreenHome> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 0.2, // width of top divider bar
+                                child: Container(
+                                  height: 5.0,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Colors
+                                            .white, // color of top divider bar
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(2.5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                             SizedBox(height: 10),
                             RichText(
                               text: TextSpan(
@@ -227,16 +273,22 @@ class _ScreenHomeState extends State<ScreenHome> {
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 14, right: 14, top: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Explore Categories', style: AppTextStyles.subHeadings),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: AppColors.greyColor2,
-                    size: 20,
-                  ),
-                ],
+              child: FadeInLeft(
+                // delay: Duration(milliseconds: 400),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Explore Categories',
+                      style: AppTextStyles.subHeadings,
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: AppColors.greyColor2,
+                      size: 20,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -247,9 +299,51 @@ class _ScreenHomeState extends State<ScreenHome> {
           // Consumer to listen to CategoryProvider changes
           Consumer<CategoryProvider>(
             builder: (context, categoryProvider, child) {
-              // Show loading indicator while fetching categories
+              // Show shimmer effect while loading categories
               if (categoryProvider.isCategoriesLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: SizedBox(
+                    height: 130,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 6, // Placeholder shimmer items
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Column(
+                            children: [
+                              //! Shimmer Image
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  width: 90,
+                                  height: 90,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              //! Shimmer Text
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  width: 70,
+                                  height: 12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
               }
 
               //! Show error if any
@@ -328,7 +422,12 @@ class _ScreenHomeState extends State<ScreenHome> {
             },
           ),
           Spacer(),
-          Image.asset('assets/images/home_screen_quote.jpg', fit: BoxFit.cover),
+          FadeInUp(
+            child: Image.asset(
+              'assets/images/home_screen_quote.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
         ],
       ),
     );

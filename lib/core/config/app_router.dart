@@ -8,38 +8,60 @@ import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => MainWrapperWidget(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => MainWrapperWidget()),
     GoRoute(
       name: 'login_screen',
       path: '/login_screen',
-      pageBuilder: (context, state) => CustomTransitionPage(
-        key: state.pageKey,
-        child: ScreenLogin(),
-        transitionDuration: const Duration(milliseconds: 800),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
+      pageBuilder:
+          (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: ScreenLogin(),
+            transitionDuration: const Duration(milliseconds: 800),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
     ),
     GoRoute(
       name: 'home_screen',
       path: '/home_screen',
-      builder: (context, state) => ScreenHome(),
+      pageBuilder:
+          (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: ScreenHome(),
+            transitionDuration: const Duration(milliseconds: 800),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
     ),
     GoRoute(
       name: 'event_screen',
       path: '/event_screen',
-      pageBuilder: (context, state) => CustomTransitionPage(
-        key: state.pageKey,
-        child: ScreenEvents(category: state.extra as CategoryModel),
-        transitionDuration: const Duration(milliseconds: 800),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
+      pageBuilder:
+          (context, state) => CustomTransitionPage(
+            key: state.pageKey,
+            child: ScreenEvents(category: state.extra as CategoryModel),
+            transitionDuration: const Duration(milliseconds: 800),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ),
     ),
   ],
 );

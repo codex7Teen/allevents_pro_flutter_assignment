@@ -1,79 +1,93 @@
 import 'package:allevents_pro/core/config/app_router.dart';
+import 'package:flutter/material.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/data/models/events_model.dart';
 import 'package:allevents_pro/data/repositories/event_repository.dart';
 import 'package:allevents_pro/shared/custom_snackbar.dart';
-import 'package:flutter/material.dart';
 
 class EventProvider extends ChangeNotifier {
   final EventRepository _eventRepository = EventRepository();
 
-  // List to store events
+  // Original list of events
+  List<EventModel> _originalEvents = [];
+  
+  // Filtered list of events for search
   List<EventModel> _events = [];
   List<EventModel> get events => _events;
 
-  // Loading state for events
+  // Other existing properties remain the same
   bool _isEventsLoading = false;
   bool get isEventsLoading => _isEventsLoading;
 
-  // Error state
   String? _eventError;
   String? get eventError => _eventError;
 
-  // View mode (list or grid)
   bool _isGridView = false;
   bool get isGridView => _isGridView;
 
-  // Toggle view mode
-  void toggleViewMode() {
-    _isGridView = !_isGridView;
+  bool _isSearchStarted = false;
+  bool get isSearchStarted => _isSearchStarted;
+
+  // New method to search events
+  void searchEvents(String query) {
+    if (query.isEmpty) {
+      // If query is empty, restore original events
+      _events = List.from(_originalEvents);
+      _isSearchStarted = false;
+    } else {
+      _isSearchStarted = true;
+      // Filter events based on event name or location
+      _events = _originalEvents.where((event) {
+        final nameLower = event.eventName.toLowerCase();
+        final locationLower = event.location.toLowerCase();
+        final queryLower = query.toLowerCase();
+        
+        return nameLower.contains(queryLower) || 
+               locationLower.contains(queryLower);
+      }).toList();
+    }
     notifyListeners();
   }
 
-  // Fetch events method
+  // Modify existing fetchEventsByCategory to store original events
   Future<void> fetchEventsByCategory(
-    BuildContext context, 
-    CategoryModel category
+    BuildContext context,
+    CategoryModel category,
   ) async {
     try {
-      // Set loading state to true
       _isEventsLoading = true;
       _eventError = null;
       notifyListeners();
 
-      // Fetch events from repository
-      final fetchedEvents = await _eventRepository.getEventsByCategory(category.data);
-
-      // Update events
-      _events = fetchedEvents;
-
-      // Optional: Show success message
-      CustomSnackbar.show(
-        context,
-        message: 'Events loaded successfully',
-        type: SnackBarType.success,
+      final fetchedEvents = await _eventRepository.getEventsByCategory(
+        category.data,
       );
-    } catch (e) {
-      // Set error state
-      _eventError = e.toString();
 
-      // Show error snackbar
+      // Store original and current events
+      _originalEvents = fetchedEvents;
+      _events = List.from(_originalEvents);
+
+    } catch (e) {
+      _eventError = e.toString();
       CustomSnackbar.show(
         context,
         message: 'Failed to load events: $e',
         type: SnackBarType.error,
       );
     } finally {
-      // Set loading state to false
       _isEventsLoading = false;
       notifyListeners();
     }
   }
 
-  // Method to open event details
+  // Other existing methods remain the same
+  void toggleViewMode() {
+    _isGridView = !_isGridView;
+    notifyListeners();
+  }
+
   void navigateToEventDetails(BuildContext context, EventModel event) {
     try {
-      // Example navigation - adjust based on your app's routing
       router.pushNamed('event_details', extra: event);
     } catch (e) {
       CustomSnackbar.show(
@@ -84,8 +98,10 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
-  // Method to refresh events
-  Future<void> refreshEvents(BuildContext context, CategoryModel category) async {
+  Future<void> refreshEvents(
+    BuildContext context,
+    CategoryModel category,
+  ) async {
     await fetchEventsByCategory(context, category);
   }
 }

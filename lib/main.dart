@@ -1,3 +1,4 @@
+import 'package:allevents_pro/core/config/app_colors.dart';
 import 'package:allevents_pro/core/config/app_router.dart';
 import 'package:allevents_pro/features/auth/providers/auth_service_provider.dart';
 import 'package:allevents_pro/features/events/providers/event_provider.dart';
@@ -18,7 +19,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthServiceProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
-        ChangeNotifierProvider(create: (context) => EventProvider())
+        ChangeNotifierProvider(create: (context) => EventProvider()),
       ],
       child: const MyApp(),
     ),
@@ -36,7 +37,15 @@ class MyApp extends StatelessWidget {
       title: 'AllEvents Pro',
       routerConfig: router,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.whiteColor,
+        ), //!  W H I T E   T H E M E
+        scaffoldBackgroundColor: AppColors.whiteColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.whiteColor,
+          elevation: 0,
+        ),
+        useMaterial3: true,
       ),
     );
   }

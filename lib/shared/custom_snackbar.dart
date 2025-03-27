@@ -31,7 +31,7 @@ class CustomSnackbar {
     String? actionLabel,
     VoidCallback? onActionPressed,
     SnackBarType type = SnackBarType.standard,
-    Duration duration = const Duration(seconds: 4),
+    Duration duration = const Duration(seconds: 2),
   }) {
     _rateLimiter.run(() {
       final scaffoldMessenger = ScaffoldMessenger.of(context);

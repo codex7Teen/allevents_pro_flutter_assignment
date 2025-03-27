@@ -41,7 +41,7 @@ class CustomLoginButtonWidget extends StatelessWidget {
                     width: 50,
                     height: 50,
                     child: Lottie.asset(
-                      'assets/lottie/Animation - 1743004383417.json',
+                      'assets/lottie/button_loading.json',
                     ),
                   )
                   : Text(buttonText, style: AppTextStyles.titleMedium2),

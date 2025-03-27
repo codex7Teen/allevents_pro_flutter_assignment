@@ -33,12 +33,6 @@ class CategoryProvider extends ChangeNotifier {
       // Update categories
       _categories = fetchedCategories;
 
-      // Optional: Show success message
-      CustomSnackbar.show(
-        context,
-        message: 'Categories loaded successfully',
-        type: SnackBarType.success,
-      );
     } catch (e) {
       // Set error state
       _categoryError = e.toString();
@@ -68,7 +62,7 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-  // Method to navigate to category details
+  // Method to navigate to event details screen, which shows the category details
   void navigateToCategoryDetails(BuildContext context, CategoryModel category) {
     try {
       // Example navigation - adjust based on your app's routing
