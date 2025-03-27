@@ -6,6 +6,7 @@ import 'package:allevents_pro/core/config/app_text_styles.dart';
 enum SnackBarType { standard, success, error, warning, info }
 
 class RateLimiter {
+  // ignore: unused_field
   Timer? _timer;
   bool _canShow = true;
 

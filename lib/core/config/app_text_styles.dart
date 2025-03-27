@@ -33,4 +33,12 @@ class AppTextStyles {
     wordSpacing: 1,
     fontWeight: FontWeight.w400,
   );
+
+    static TextStyle bodySmall2 = GoogleFonts.poppins(
+    color: AppColors.whiteColor,
+    fontSize: 13.5,
+    letterSpacing: 0.01,
+    wordSpacing: 1,
+    fontWeight: FontWeight.w500,
+  );
 }
