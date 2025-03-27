@@ -41,4 +41,13 @@ class AppTextStyles {
     wordSpacing: 1,
     fontWeight: FontWeight.w500,
   );
+
+    static TextStyle subHeadings = GoogleFonts.poppins(
+                    color: AppColors.blackColor,
+                    fontSize: 17.5,
+                    decoration: TextDecoration.none,
+                    letterSpacing: 0,
+                    wordSpacing: 0,
+                    fontWeight: FontWeight.w600,
+                  );
 }
