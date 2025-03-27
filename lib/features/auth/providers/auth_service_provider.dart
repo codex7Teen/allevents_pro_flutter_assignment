@@ -30,7 +30,7 @@ class AuthServiceProvider extends ChangeNotifier {
         _currentUser = userCredential.user;
 
         // Navigate to home screen or next page
-        router.go('/home_screen');
+        router.goNamed('home_screen');
       } else {
         // Show error if login failed
         CustomSnackbar.show(
@@ -58,7 +58,7 @@ class AuthServiceProvider extends ChangeNotifier {
     await _authServices.signOut();
     _currentUser = null;
     // Navigate back to login screen after sign out
-    router.go('/login_screen');
+    router.goNamed('login_screen');
     notifyListeners();
   }
 }

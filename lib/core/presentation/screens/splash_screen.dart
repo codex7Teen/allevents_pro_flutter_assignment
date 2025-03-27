@@ -38,10 +38,13 @@ class _ScreenSplash1State extends State<ScreenSplash1> {
 
     // Navigate to intro-screen or Main screen based on argument
     Future.delayed(const Duration(milliseconds: 3000), () {
-      if (mounted) {
-        context.go(widget.screenName!);
-      }
-    });
+  if (mounted) {
+    if (widget.screenName != null) {
+      context.goNamed(widget.screenName!);
+    }
+  }
+});
+
   }
 
   @override
