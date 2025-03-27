@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 class EventService {
   final Dio _dio = Dio();
 
+  //! Fetch Events by Category
   Future<List<EventModel>> fetchEventsByCategory(String categoryUrl) async {
     try {
       final response = await _dio.get(categoryUrl);

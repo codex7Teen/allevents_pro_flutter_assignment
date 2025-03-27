@@ -1,9 +1,10 @@
+import 'package:allevents_pro/core/config/app_constants.dart';
 import 'package:dio/dio.dart';
 import '../models/category_model.dart';
 
 class CategoryService {
   final Dio _dio = Dio();
-  final String baseUrl = "https://allevents.s3.amazonaws.com/tests/categories.json";
+  final String baseUrl = AppConstants.apiBaseUrl;
 
   //! Fetches categories from the API
   //! Uses Dio for network requests and handles different HTTP status codes
