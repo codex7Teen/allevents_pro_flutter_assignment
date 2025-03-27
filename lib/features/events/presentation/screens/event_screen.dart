@@ -71,7 +71,7 @@ class _ScreenEventsState extends State<ScreenEvents> {
                       spacing: 8,
                       children: [
                         IconButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => router.pop(),
                           icon: Icon(
                             Icons.arrow_back_ios_new_rounded,
                             color: AppColors.whiteColor,
@@ -338,10 +338,7 @@ class _ScreenEventsState extends State<ScreenEvents> {
     return GestureDetector(
       onTap: () async {
         final url = event.eventUrl;
-        if (!await launchUrl(
-          Uri.parse(url),
-          mode: LaunchMode.inAppBrowserView,
-        )) {
+        if (!await launchUrl(Uri.parse(url), mode: LaunchMode.inAppWebView)) {
           throw Exception('Could not launch url $url');
         }
       },

@@ -1,38 +1,38 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:allevents_pro/core/config/app_router.dart';
-import 'package:allevents_pro/data/services/auth_services.dart';
+import 'package:allevents_pro/data/repositories/auth_repository.dart';
 import 'package:allevents_pro/shared/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthServiceProvider extends ChangeNotifier {
-  final AuthServices _authServices = AuthServices();
+  final AuthRepository _authRepository = AuthRepository();
 
-  // Loading state for Google login
   bool _isGoogleLoginLoading = false;
   bool get isGoogleLoginLoading => _isGoogleLoginLoading;
 
-  // Current user
   User? _currentUser;
   User? get currentUser => _currentUser;
 
-  // Google Login Method
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      // Set loading state to true
       _isGoogleLoginLoading = true;
       notifyListeners();
 
-      // Attempt Google login
       final UserCredential? userCredential =
-          await _authServices.loginWithGoogle();
+          await _authRepository.loginWithGoogle();
 
       if (userCredential != null) {
         _currentUser = userCredential.user;
-
-        // Navigate to home screen or next page
+        CustomSnackbar.show(
+          context,
+          message: 'Google Sign-In success...🎉',
+          type: SnackBarType.success,
+          duration: Duration(seconds: 3),
+        );
         router.goNamed('home_screen');
       } else {
-        // Show error if login failed
         CustomSnackbar.show(
           context,
           message: 'Google Sign-In failed',
@@ -40,24 +40,20 @@ class AuthServiceProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
-      // Handle any errors
       CustomSnackbar.show(
         context,
         message: 'An error occurred: ${e.toString()}',
         type: SnackBarType.error,
       );
     } finally {
-      // Set loading state to false
       _isGoogleLoginLoading = false;
       notifyListeners();
     }
   }
 
-  // Sign out method
   Future<void> signOut() async {
-    await _authServices.signOut();
+    await _authRepository.signOut();
     _currentUser = null;
-    // Navigate back to login screen after sign out
     router.goNamed('login_screen');
     notifyListeners();
   }

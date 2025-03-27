@@ -8,9 +8,10 @@ class AuthServices {
   //! S I G N - O U T
   Future<void> signOut() async {
     try {
+      await GoogleSignIn().signOut();
       await _auth.signOut();
     } catch (e) {
-      log("Something went wrong. Error: $e");
+      log("Sign-out Error: $e");
     }
   }
 
@@ -18,22 +19,20 @@ class AuthServices {
   Future<UserCredential?> loginWithGoogle() async {
     try {
       final googleUser = await GoogleSignIn().signIn();
-
       if (googleUser == null) {
         log("Google sign-in was canceled.");
         return null;
       }
 
       final googleAuth = await googleUser.authentication;
-
-      final cred = GoogleAuthProvider.credential(
+      final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
         accessToken: googleAuth.accessToken,
       );
 
-      return await _auth.signInWithCredential(cred);
+      return await _auth.signInWithCredential(credential);
     } catch (e) {
-      log("GOOGLE AUTHORISATION ERROR ${e.toString()}");
+      log("Google Authorization Error: ${e.toString()}");
     }
     return null;
   }

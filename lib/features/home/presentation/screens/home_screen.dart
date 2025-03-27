@@ -1,5 +1,5 @@
 import 'package:allevents_pro/core/config/app_colors.dart';
-import 'package:allevents_pro/core/config/app_router.dart';
+
 import 'package:allevents_pro/core/config/app_text_styles.dart';
 import 'package:allevents_pro/core/utils/screen_dimesions_util.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
