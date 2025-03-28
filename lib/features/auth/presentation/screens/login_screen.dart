@@ -24,12 +24,28 @@ class _ScreenLoginState extends State<ScreenLogin> {
           Container(color: AppColors.blackColor),
 
           // Background image with fade
-          LoginScreenWidgets.buildBackgroundImage(
-            _imageLoaded,
-            mounted,
-            () => setState(() {
-              _imageLoaded = true;
-            }),
+          AnimatedOpacity(
+            opacity: _imageLoaded ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 500),
+            child: SizedBox.expand(
+              child: Image.asset(
+                'assets/images/login_screen_background.jpg',
+                fit: BoxFit.cover,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (frame != null) {
+                    // Image has loaded
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      if (mounted) {
+                        setState(() {
+                          _imageLoaded = true;
+                        });
+                      }
+                    });
+                  }
+                  return child;
+                },
+              ),
+            ),
           ),
 
           // Applying blur

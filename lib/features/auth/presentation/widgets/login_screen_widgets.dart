@@ -10,34 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreenWidgets {
-  static buildBackgroundImage(
-    bool imageLoaded,
-    bool mounted,
-    VoidCallback onTap,
-  ) {
-    return AnimatedOpacity(
-      opacity: imageLoaded ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
-      child: SizedBox.expand(
-        child: Image.asset(
-          'assets/images/login_screen_background.jpg',
-          fit: BoxFit.cover,
-          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-            if (frame != null) {
-              // Image has loaded
-              Future.delayed(const Duration(milliseconds: 100), () {
-                if (mounted) {
-                  onTap;
-                }
-              });
-            }
-            return child;
-          },
-        ),
-      ),
-    );
-  }
-
   static buildBlur() {
     return Positioned.fill(
       child: BackdropFilter(
