@@ -40,6 +40,7 @@ class UserFriendlyErrorMapper {
       case ErrorType.parsing:
         return 'We encountered an issue processing the data. Please try again.';
       case ErrorType.unknown:
+      // ignore: unreachable_switch_default
       default:
         return 'An unexpected error occurred. Please try again.';
     }
@@ -47,8 +48,6 @@ class UserFriendlyErrorMapper {
 
   /// Logs the original error for debugging while returning a user-friendly message
   static String logAndMapError(String originalError) {
-    // TODO: Replace with actual logging mechanism
-    print('Original Error: $originalError');
     return mapErrorMessage(originalError);
   }
 }
