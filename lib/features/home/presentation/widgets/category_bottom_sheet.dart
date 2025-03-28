@@ -4,15 +4,18 @@ import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/features/home/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 
+/// A bottom sheet widget to display event categories
 class CategoryBottomSheet extends StatelessWidget {
-  final CategoryProvider categoryProvider;
+  final CategoryProvider categoryProvider; // Instance of CategoryProvider
 
   const CategoryBottomSheet({super.key, required this.categoryProvider});
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight =
+        MediaQuery.of(context).size.height; // Get screen height
 
+    // Show loading indicator if categories are still loading
     if (categoryProvider.isCategoriesLoading) {
       return SizedBox(
         height: 200,
@@ -20,6 +23,7 @@ class CategoryBottomSheet extends StatelessWidget {
       );
     }
 
+    // Show error message if there is an issue loading categories
     if (categoryProvider.categoryError != null) {
       return SizedBox(
         height: 200,
@@ -33,6 +37,7 @@ class CategoryBottomSheet extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Top indicator bar for bottom sheet
           Align(
             alignment: Alignment.center,
             child: FractionallySizedBox(
@@ -47,6 +52,8 @@ class CategoryBottomSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
+
+          // Title text with highlighted category word
           RichText(
             text: TextSpan(
               text: "Choose your preferred",
@@ -62,6 +69,8 @@ class CategoryBottomSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
+
+          // List of categories
           Expanded(
             child: ListView.separated(
               itemCount: categoryProvider.categories.length,
@@ -79,12 +88,20 @@ class CategoryBottomSheet extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    category.category[0].toUpperCase() + category.category.substring(1),
-                    style: AppTextStyles.bodySmall2.copyWith(color: AppColors.blackColor),
+                    // Capitalize first letter of category name
+                    category.category[0].toUpperCase() +
+                        category.category.substring(1),
+                    style: AppTextStyles.bodySmall2.copyWith(
+                      color: AppColors.blackColor,
+                    ),
                   ),
                   onTap: () {
+                    // Close bottom sheet and navigate to category details
                     Navigator.pop(context);
-                    categoryProvider.navigateToCategoryDetails(context, category);
+                    categoryProvider.navigateToCategoryDetails(
+                      context,
+                      category,
+                    );
                   },
                 );
               },

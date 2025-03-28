@@ -1,3 +1,4 @@
+// Router Configuration - Manages application navigation
 import 'package:allevents_pro/core/presentation/screens/main_auth_wrapper.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/features/auth/presentation/screens/login_screen.dart';
@@ -8,7 +9,10 @@ import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   routes: [
+    // Main authentication wrapper route
     GoRoute(path: '/', builder: (context, state) => MainWrapperWidget()),
+
+    // Login screen route with fade transition
     GoRoute(
       name: 'login_screen',
       path: '/login_screen',
@@ -27,6 +31,8 @@ final GoRouter router = GoRouter(
             },
           ),
     ),
+
+    // Home screen route with fade transition
     GoRoute(
       name: 'home_screen',
       path: '/home_screen',
@@ -45,6 +51,8 @@ final GoRouter router = GoRouter(
             },
           ),
     ),
+
+    // Event screen route with fade transition, passing category data
     GoRoute(
       name: 'event_screen',
       path: '/event_screen',

@@ -3,6 +3,7 @@ import 'package:allevents_pro/core/config/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+//! C U S T O M  -  L O G I N   B U T T O N
 class CustomLoginButtonWidget extends StatelessWidget {
   final void Function()? onTap;
   final String buttonText;
@@ -34,15 +35,15 @@ class CustomLoginButtonWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Button icon
               Image.asset(image, width: 28),
               Spacer(),
+              // Show loading or button text
               isLoading
                   ? SizedBox(
                     width: 50,
                     height: 50,
-                    child: Lottie.asset(
-                      'assets/lottie/button_loading.json',
-                    ),
+                    child: Lottie.asset('assets/lottie/button_loading.json'),
                   )
                   : Text(buttonText, style: AppTextStyles.titleMedium2),
               Spacer(),

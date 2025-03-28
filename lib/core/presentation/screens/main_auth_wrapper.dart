@@ -19,7 +19,7 @@ class MainWrapperWidget extends StatelessWidget {
             return const Center(child: Text("Error"));
           } else {
             if (snapshot.data == null) {
-              // Show splash and navigate to intro screen
+              // Show splash and navigate to login or home screen
               return const ScreenSplash1(screenName: 'login_screen');
             } else {
               return const ScreenSplash1(screenName: 'home_screen');

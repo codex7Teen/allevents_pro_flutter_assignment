@@ -1,3 +1,4 @@
+// Auth Service Provider - Manages authentication state and user sessions
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:allevents_pro/core/config/app_router.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthServiceProvider extends ChangeNotifier {
-  final AuthRepository _authRepository = AuthRepository();
+  final AuthRepository _authRepository =
+      AuthRepository(); // Instance of authentication repository
 
   bool _isGoogleLoginLoading = false;
   bool get isGoogleLoginLoading => _isGoogleLoginLoading;
@@ -15,6 +17,7 @@ class AuthServiceProvider extends ChangeNotifier {
   User? _currentUser;
   User? get currentUser => _currentUser;
 
+  /// Handles Google Sign-In process
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       _isGoogleLoginLoading = true;
@@ -51,6 +54,7 @@ class AuthServiceProvider extends ChangeNotifier {
     }
   }
 
+  /// Signs out the user and navigates to the login screen
   Future<void> signOut() async {
     await _authRepository.signOut();
     _currentUser = null;
