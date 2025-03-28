@@ -6,7 +6,6 @@ import 'package:allevents_pro/data/models/events_model.dart';
 import 'package:allevents_pro/features/events/providers/event_provider.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 

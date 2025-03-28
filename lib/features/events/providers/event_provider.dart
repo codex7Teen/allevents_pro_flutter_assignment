@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:allevents_pro/core/config/app_router.dart';
+import 'package:allevents_pro/core/utils/user_friendly_error_displayer.dart';
 import 'package:flutter/material.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/data/models/events_model.dart';
@@ -12,7 +13,7 @@ class EventProvider extends ChangeNotifier {
 
   // Original list of events
   List<EventModel> _originalEvents = [];
-  
+
   // Filtered list of events for search
   List<EventModel> _events = [];
   List<EventModel> get events => _events;
@@ -39,14 +40,15 @@ class EventProvider extends ChangeNotifier {
     } else {
       _isSearchStarted = true;
       // Filter events based on event name or location
-      _events = _originalEvents.where((event) {
-        final nameLower = event.eventName.toLowerCase();
-        final locationLower = event.location.toLowerCase();
-        final queryLower = query.toLowerCase();
-        
-        return nameLower.contains(queryLower) || 
-               locationLower.contains(queryLower);
-      }).toList();
+      _events =
+          _originalEvents.where((event) {
+            final nameLower = event.eventName.toLowerCase();
+            final locationLower = event.location.toLowerCase();
+            final queryLower = query.toLowerCase();
+
+            return nameLower.contains(queryLower) ||
+                locationLower.contains(queryLower);
+          }).toList();
     }
     notifyListeners();
   }
@@ -68,12 +70,12 @@ class EventProvider extends ChangeNotifier {
       // Store original and current events
       _originalEvents = fetchedEvents;
       _events = List.from(_originalEvents);
-
     } catch (e) {
-      _eventError = e.toString();
+      // Set error state
+      _eventError = UserFriendlyErrorMapper.logAndMapError(e.toString());
       CustomSnackbar.show(
         context,
-        message: 'Failed to load events: $e',
+        message: _eventError ?? 'Something went wrong',
         type: SnackBarType.error,
       );
     } finally {

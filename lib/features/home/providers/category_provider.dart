@@ -1,4 +1,5 @@
 import 'package:allevents_pro/core/config/app_router.dart';
+import 'package:allevents_pro/core/utils/user_friendly_error_displayer.dart';
 import 'package:allevents_pro/data/models/category_model.dart';
 import 'package:allevents_pro/data/repositories/category_repository.dart';
 import 'package:allevents_pro/shared/custom_snackbar.dart';
@@ -32,15 +33,13 @@ class CategoryProvider extends ChangeNotifier {
 
       // Update categories
       _categories = fetchedCategories;
-
     } catch (e) {
       // Set error state
-      _categoryError = e.toString();
-
-      // Show error snackbar
+      _categoryError = UserFriendlyErrorMapper.logAndMapError(e.toString());
       CustomSnackbar.show(
+        // ignore: use_build_context_synchronously
         context,
-        message: 'Failed to load categories: $e',
+        message: _categoryError ?? 'Something went wrong',
         type: SnackBarType.error,
       );
     } finally {
